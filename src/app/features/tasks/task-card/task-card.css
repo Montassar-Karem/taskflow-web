@@ -1,0 +1,19 @@
+.card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 8px 0;
+}
+
+.done h3 {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+.badge {
+  font-size: 12px;
+  background: #eef;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-right: 8px;
+}

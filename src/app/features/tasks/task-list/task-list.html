@@ -1,0 +1,15 @@
+<p>{{taskCount()}} {{taskCount() === 1 ? 'task' : 'tasks'}}</p>
+<p>{{doneCount()}} done</p>
+
+@for (task of tasks(); track task.id) {
+  <app-task-card
+  [id]="task.id" 
+  [title]="task.title"
+  [priority]="task.priority"
+  [description]="task.description ?? ''"
+  [done]="task.done"
+  (deleted)="deleteTask(task.id)" 
+  (toggled)="toggleTask(task.id)"/>
+}@empty {
+  <p>No task yet.</p>
+}

@@ -1,0 +1,11 @@
+<a routerLink="/tasks">← Back to list</a>
+@if (task(); as t) {
+    <h2>{{t.title}}</h2>
+    <p>Priority : {{t.priority}}</p>
+    @if (t.description) {
+        <p>{{t.description}}</p>
+    }
+    <p>Status : {{t.done ? 'Done':'To do'}}</p>
+}@else {
+    <p>Task not found</p>
+}

@@ -1,0 +1,9 @@
+<article class="card" [class.done]="done()">
+    <h3><a [routerLink]="['/tasks', id()]">{{ title() }}</a></h3>
+    @if(description()){
+           <p> {{description()}} </p>
+        }     
+    <span class="badge">{{priority()}}</span>
+    <button (click)="toggle()">{{label()}}</button>
+    <button (click)="remove()">Delete</button>
+</article>
