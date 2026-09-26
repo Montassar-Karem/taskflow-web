@@ -1,10 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { TaskCard } from '../task-card/task-card';
 import { TaskService } from '../task.service';
+import { RouterLink } from '@angular/router';
+
 
 @Component({
   selector: 'app-task-list',
-  imports: [TaskCard],
+  imports: [TaskCard,RouterLink],
   templateUrl: './task-list.html',
   styleUrl: './task-list.css',
 })
@@ -21,5 +23,9 @@ export class TaskList {
 
   toggleTask(id: number) {
     this.taskService.toggle(id);
+  }
+
+  addTask(){
+    this.taskService.add;
   }
 }

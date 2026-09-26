@@ -30,4 +30,9 @@ export class TaskService {
             )
         )
     }
+
+    add(task:Omit<Task, 'id' | 'done'>){
+        const nextId = Math.max(0, ...this._tasks().map(t => t.id)) + 1;
+        this._tasks.update(list => [...list, {...task,id: nextId,done:false}]);
+    }
 }

@@ -1,0 +1,43 @@
+<a routerLink="/tasks">← Back to list</a>
+<h2>New task</h2>
+<form [formGroup]="form" (ngSubmit)="save()">
+    <p>
+        <label>Title
+            <br>
+            <input formControlName="title">
+            @if (title.touched && title.invalid) {
+            @if (title.hasError('required')) {
+            <br /><small class="error">Title is required.</small>
+            }
+            @if (title.hasError('minlength')) {
+            <br /><small class="error">Title must be at least 3 characters.</small>
+            }
+            @if (title.hasError('maxlength')){
+            <br /><small class="warning">Title must not be more than 50 characters.</small>
+            }
+            }
+        </label>
+    </p>
+
+    <p>
+        <label>Priority
+            <br>
+            <select formControlName="priority">
+                <option value="LOW">low</option>
+                <option value="MEDIUM">medium</option>
+                <option value="HIGH">high</option>
+            </select>
+        </label>
+    </p>
+
+    <p>
+        <label>Description <br>
+            <textarea formControlName="description"></textarea>
+        </label>
+    </p>
+    <button type="submit" [disabled]="form.invalid">Create</button>
+</form>
+
+<!-- Debug temporaire
+<pre>{{ form.value | json }}</pre>
+<p>Valid: {{ form.valid }}</p> -->

@@ -1,0 +1,10 @@
+.error {
+  color: #c0392b;
+}
+.warning{
+    color: sienna;
+}
+
+input.ng-invalid.ng-touched {
+  border: 1px solid #c0392b;
+}
