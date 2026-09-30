@@ -6,7 +6,7 @@ import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-task-list',
-  imports: [TaskCard,RouterLink],
+  imports: [TaskCard, RouterLink],
   templateUrl: './task-list.html',
   styleUrl: './task-list.css',
 })
@@ -16,6 +16,12 @@ export class TaskList {
   tasks = this.taskService.tasks;
   taskCount = this.taskService.count;
   doneCount = this.taskService.doneCount;
+  loading = this.taskService.loading;
+  error = this.taskService.error;
+
+  retry(){
+    this.taskService.load();
+  }
 
   deleteTask(id: number) {
     this.taskService.delete(id);
@@ -25,7 +31,7 @@ export class TaskList {
     this.taskService.toggle(id);
   }
 
-  addTask(){
+  addTask() {
     this.taskService.add;
   }
 }

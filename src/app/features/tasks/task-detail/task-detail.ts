@@ -14,4 +14,5 @@ export class TaskDetail {
   id = input.required<string>();
 
   task = computed(() => this.taskService.tasks().find(t => t.id === Number(this.id())));
+  loading = this.taskService.loading;
 }

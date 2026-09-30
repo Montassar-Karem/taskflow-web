@@ -1,4 +1,11 @@
 <a routerLink="/tasks/new">+ New task</a>
+@if (loading()) {
+  <p>Loading…</p>
+} @else if (error()) {
+  <p class="error">{{ error() }}</p>
+  <button (click)="retry()">Retry</button>
+}@else {
+
 <p>{{taskCount()}} {{taskCount() === 1 ? 'task' : 'tasks'}}</p>
 <p>{{doneCount()}} done</p>
 
@@ -15,3 +22,4 @@
   <p>No task yet.</p>
 }
 
+}

@@ -1,4 +1,7 @@
 <a routerLink="/tasks">← Back to list</a>
+@if (loading()) {
+  <p>Loading…</p>
+} @else {
 @if (task(); as t) {
     <h2>{{t.title}}</h2>
     <p>Priority : {{t.priority}}</p>
@@ -8,4 +11,5 @@
     <p>Status : {{t.done ? 'Done':'To do'}}</p>
 }@else {
     <p>Task not found</p>
+}
 }
