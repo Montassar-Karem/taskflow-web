@@ -1,38 +1,71 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, inject } from '@angular/core';
 import { Task } from './task.model';
+import { HttpClient } from '@angular/common/http';
+
 
 @Injectable({ providedIn: 'root' })
 export class TaskService {
-    private readonly _tasks = signal<Task[]>([
-        { id: 1, title: 'Set up Angular', priority: 'HIGH', done: false },
-        { id: 2, title: 'Build the Spring API', priority: 'MEDIUM', done: false },
-        { id: 3, title: 'Build CI/CD', priority: 'LOW', description: 'GitHub Actions pipeline', done: false },
-    ]);
+    private readonly http = inject(HttpClient);
+    private readonly apiUrl = 'http://localhost:8080/api/tasks';
+    private readonly _tasks = signal<Task[]>([]);
+    private readonly _loading = signal(false);
+    private readonly _error = signal<string | null>(null);
+
+    constructor() {
+        this.load();
+    }
+
+    load() {
+        this._loading.set(true);
+        this._error.set(null);
+
+        this.http.get<Task[]>(this.apiUrl)
+            .subscribe(
+                {
+                    next: tasks => {
+                        this._tasks.set(tasks);
+                        this._loading.set(false);
+                    },
+                    error: () => {
+                        this._error.set('Could not load tasks. Is the API running?');
+                        this._loading.set(false);
+                    },
+                }
+            );
+    }
 
     readonly tasks = this._tasks.asReadonly();
-
     readonly count = computed(() => this._tasks().length);
-
     readonly doneCount = computed(() => this._tasks()
         .filter(t => t.done)
         .length);
+    readonly loading = this._loading.asReadonly();
+    readonly error = this._error.asReadonly();
 
     delete(id: number) {
-        this._tasks.update(list => list.filter(t => t.id !== id));
+        this.http.delete<void>(`${this.apiUrl}/${id}`)
+            .subscribe(
+                () => {
+                    this._tasks.update(list => list.filter(t => t.id !== id))
+                }
+            );
     }
 
     toggle(id: number) {
-        this._tasks.update(
-            list => list.map(
-                t => (t.id === id) ? {
-                    ...t, done: !t.done
-                } : t
-            )
-        )
+        this.http.patch<Task>(`${this.apiUrl}/${id}/toggle`, null)
+            .subscribe(
+                updated => {
+                    this._tasks.update(list => list.map(
+                        t => t.id === updated.id ? updated : t
+                    ));
+                }
+            );
     }
 
-    add(task:Omit<Task, 'id' | 'done'>){
-        const nextId = Math.max(0, ...this._tasks().map(t => t.id)) + 1;
-        this._tasks.update(list => [...list, {...task,id: nextId,done:false}]);
+    add(task: Omit<Task, 'id' | 'done'>) {
+        this.http.post<Task>(this.apiUrl, task)
+            .subscribe(created => this._tasks.update(
+                list => [...list, created]
+            ));
     }
 }
